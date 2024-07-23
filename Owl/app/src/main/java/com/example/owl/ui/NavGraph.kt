@@ -35,6 +35,10 @@ import com.example.owl.ui.course.CourseDetails
 import com.example.owl.ui.courses.CourseTabs
 import com.example.owl.ui.courses.courses
 import com.example.owl.ui.onboarding.Onboarding
+import example.imageviewer.enterT
+import example.imageviewer.exitT
+import example.imageviewer.popEnterT
+import example.imageviewer.popExitT
 
 /**
  * Destinations used in the ([OwlApp]).
@@ -63,7 +67,11 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        enterTransition = enterT,
+        exitTransition = exitT,
+        popExitTransition = popExitT,
+        popEnterTransition = popEnterT
     ) {
         composable(MainDestinations.ONBOARDING_ROUTE) {
             // Intercept back in Onboarding: make it finish the activity

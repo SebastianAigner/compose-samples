@@ -16,6 +16,7 @@
 
 package com.example.owl.ui.utils
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -42,12 +43,8 @@ fun NetworkImage(
     contentScale: ContentScale = ContentScale.Crop,
     placeholderColor: Color = MaterialTheme.colors.compositedOnSurface(0.2f)
 ) {
-    AsyncImage(
-        model = url,
-        contentDescription = contentDescription,
-        placeholder = painterResource(R.drawable.photo_architecture),
+    Box(
         modifier = modifier,
-        contentScale = contentScale
     )
 }
 
