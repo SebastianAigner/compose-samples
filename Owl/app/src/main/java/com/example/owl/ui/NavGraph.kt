@@ -22,14 +22,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
-import androidx.navigation.NavType
+import androidx.navigation.*
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import androidx.navigation.navigation
 import com.example.owl.ui.MainDestinations.COURSE_DETAIL_ID_KEY
 import com.example.owl.ui.course.CourseDetails
 import com.example.owl.ui.courses.CourseTabs
@@ -128,7 +124,7 @@ class MainActions(navController: NavHostController) {
     // Used from COURSES_ROUTE
     val openCourse = { newCourseId: Long, from: NavBackStackEntry ->
         // In order to discard duplicated navigation events, we check the Lifecycle
-        if (from.lifecycleIsResumed()) {
+        if (navController.allowsAwayNavigation(from)) {
             navController.navigate("${MainDestinations.COURSE_DETAIL_ROUTE}/$newCourseId")
         }
     }
@@ -136,7 +132,7 @@ class MainActions(navController: NavHostController) {
     // Used from COURSE_DETAIL_ROUTE
     val relatedCourse = { newCourseId: Long, from: NavBackStackEntry ->
         // In order to discard duplicated navigation events, we check the Lifecycle
-        if (from.lifecycleIsResumed()) {
+        if (navController.allowsAwayNavigation(from)) {
             navController.navigate("${MainDestinations.COURSE_DETAIL_ROUTE}/$newCourseId")
         }
     }
@@ -144,7 +140,7 @@ class MainActions(navController: NavHostController) {
     // Used from COURSE_DETAIL_ROUTE
     val upPress: (from: NavBackStackEntry) -> Unit = { from ->
         // In order to discard duplicated navigation events, we check the Lifecycle
-        if (from.lifecycleIsResumed()) {
+        if (navController.allowsAwayNavigation(from)) {
             navController.navigateUp()
         }
     }
@@ -157,3 +153,13 @@ class MainActions(navController: NavHostController) {
  */
 private fun NavBackStackEntry.lifecycleIsResumed() =
     this.lifecycle.currentState == Lifecycle.State.RESUMED
+
+
+fun NavController.allowsAwayNavigation(bse: NavBackStackEntry): Boolean {
+    if (this.currentBackStackEntry == bse) {
+        return true
+    } else {
+        println("Away navigation not allowed for non-top back stack entry $bse")
+        return false
+    }
+}
